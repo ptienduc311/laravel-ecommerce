@@ -55,6 +55,7 @@ class ShopController extends Controller
         }
         $brands = Brand::orderBy('name', 'ASC')->get();
         $categories = Category::orderBy("name", "ASC")->get();
+        $productIdsWishlist = Cart::instance("wishlist")->content()->pluck('id')->toArray();
         $products = Product::where(function ($query) use ($q_brands) {
             $query->whereIn('brand_id', explode(',', $q_brands))->orWhereRaw("'" . $q_brands . "'=''");
         })
@@ -63,7 +64,7 @@ class ShopController extends Controller
             })
             ->whereBetween('regular_price',array($from,$to))
             ->orderBy('created_at', 'DESC')->orderBy($o_column, $o_order)->paginate($size);
-        return view('shop', compact('products', 'page', 'size', 'order', 'brands', 'q_brands', 'categories', 'q_categories','from','to'));
+        return view('shop', compact('products', 'productIdsWishlist', 'page', 'size', 'order', 'brands', 'q_brands', 'categories', 'q_categories','from','to'));
     }
     public function productDetails($slug)
     {

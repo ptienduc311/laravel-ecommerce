@@ -208,11 +208,17 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="javascript:void(0)"
-                                                onclick="addProductToWishlist({{ $product->id }}, '{{ $product->name }}', 1, {{ $product->sale_price }})"
-                                                class="wishlist">
-                                                <i data-feather="heart"></i>
-                                            </a>
+                                            @if (in_array($product->id, $productIdsWishlist))
+                                                <a class="active">
+                                                    <i data-feather="heart"></i>
+                                                </a>
+                                            @else
+                                                <a href="javascript:void(0)"
+                                                    onclick="addProductToWishlist({{ $product->id }}, '{{ $product->name }}', 1, {{ $product->sale_price }})"
+                                                    class="wishlist">
+                                                    <i data-feather="heart"></i>
+                                                </a>
+                                            @endif
                                         </li>
                                     </ul>
                                 </div>
@@ -249,9 +255,9 @@
                                 </div>
                             </div>
                         </div>
-                        <form id="addtocart-{{ $product->id }}" method="post" action="{{route('cart.store')}}">
+                        <form id="addtocart-{{ $product->id }}" method="post" action="{{ route('cart.store') }}">
                             @csrf
-                            <input type="hidden" name="id" value="{{$product->id}}">                                             
+                            <input type="hidden" name="id" value="{{ $product->id }}">
                             <input type="hidden" name="quantity" id="qty" value="1">
                         </form>
                     </div>
@@ -1006,9 +1012,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <form id="addtocart-{{ $product->id }}" method="post" action="{{route('cart.store')}}">
+                            <form id="addtocart-{{ $product->id }}" method="post" action="{{ route('cart.store') }}">
                                 @csrf
-                                <input type="hidden" name="id" value="{{$product->id}}">                                             
+                                <input type="hidden" name="id" value="{{ $product->id }}">
                                 <input type="hidden" name="quantity" id="qty" value="1">
                             </form>
                         </div>
