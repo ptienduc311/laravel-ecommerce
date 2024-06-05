@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [AppController::class, 'index'])->name('app.index');
+Route::get('/search', [AppController::class, 'search'])->name('search');
+
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/product/{slug}',[ShopController::class,'productDetails'])->name('shop.product.details');
 Route::get('/cart-wishlist-count', [ShopController::class, 'getCartAndWishlistCount'])->name('shop.cart.wishlist.count');

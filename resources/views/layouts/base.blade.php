@@ -257,7 +257,8 @@
                                                             @endif
                                                         @endforeach
                                                         @if ($temp > 3)
-                                                            <li><a href="{{route('cart.index')}}">Go to cart</a></li>
+                                                            <li><a href="{{ route('cart.index') }}">Go to cart</a>
+                                                            </li>
                                                         @endif
                                                     </ul>
                                                 </div>
@@ -320,18 +321,16 @@
                                 </ul>
                             </div>
                             <div class="search-full">
-                                <form method="GET" class="search-full" action="http://localhost:8000/search">
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <i data-feather="search" class="font-light"></i>
-                                        </span>
-                                        <input type="text" name="q" class="form-control search-type"
-                                            placeholder="Search here..">
-                                        <span class="input-group-text close-search">
-                                            <i data-feather="x" class="font-light"></i>
-                                        </span>
-                                    </div>
-                                </form>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i data-feather="search" class="font-light"></i>
+                                    </span>
+                                    <input type="text" name="q" id="search-input"
+                                        class="form-control search-type" placeholder="Search here..">
+                                    <span class="input-group-text close-search">
+                                        <i data-feather="x" class="font-light"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -340,34 +339,40 @@
         </div>
     </header>
 
+    {{-- 123 --}}
+    <div class="container-fluid-search">
+        <div id="search-results" class="row">
+        </div>
+    </div>
+
     <div class="mobile-menu d-sm-none">
         <ul>
             <li>
-                <a href="demo3.php" class="active">
+                <a href="{{ route('app.index') }}" class="{{ Request::is('/') ? 'active' : '' }}">
                     <i data-feather="home"></i>
                     <span>Home</span>
                 </a>
             </li>
             <li>
-                <a href="javascript:void(0)">
+                <a href="{{ route('shop.index') }}" class="{{ Request::is('shop') ? 'active' : '' }}">
                     <i data-feather="align-justify"></i>
                     <span>Category</span>
                 </a>
             </li>
             <li>
-                <a href="javascript:void(0)">
+                <a href="{{ route('cart.index') }}" class="{{ Request::is('cart') ? 'active' : '' }}">
                     <i data-feather="shopping-bag"></i>
                     <span>Cart</span>
                 </a>
             </li>
             <li>
-                <a href="javascript:void(0)">
+                <a href="{{ route('wishlist.list') }}" class="{{ Request::is('wishlist') ? 'active' : '' }}">
                     <i data-feather="heart"></i>
                     <span>Wishlist</span>
                 </a>
             </li>
             <li>
-                <a href="user-dashboard.php">
+                <a href="{{ route('login') }}" class="{{ Request::is('login') ? 'active' : '' }}">
                     <i data-feather="user"></i>
                     <span>Account</span>
                 </a>
@@ -618,6 +623,66 @@
             $('#rowId_D').val(rowId);
             $('#deleteFromCart').submit();
         }
+
+        $(".search-box").on('click', function() {
+            $('#search-input').focus();
+        });
+
+        $(function() {
+            $('#search-input').on('keyup', function() {
+                let query = $(this).val();
+                if (query.length > 1) {
+                    $.ajax({
+                        url: "{{ route('search') }}",
+                        type: "GET",
+                        data: {
+                            query: query
+                        },
+                        success: function(data) {
+                            $('#search-results').empty();
+                            if (data.length > 0) {
+                                data.slice(0, 6).forEach(function(product) {
+                                    $('#search-results').append(
+                                        `<div class="productItem d-flex p-2 col-lg-6">
+                                            <a href="/product/${product.slug}">
+                                                <img src="{{ asset('assets/images/fashion/product/back/${product.image}') }}" class="img-fluid-search"
+                                                alt="${product.name}">
+                                            </a>
+                                            
+                                            <div class="info-product">
+                                                <a href="/product/${product.slug}">
+                                                    <h3>${product.name}</h3>
+                                                </a>
+                                                <p class="sale-price">$${product.sale_price} <span class="regular-price">$${product.regular_price}</span></p>
+                                                <div class="category">
+                                                    Category: <span class="name-cat">${product.category.name}</span>
+                                                </div>
+                                                <div class="brand">
+                                                    Brand: <span class="name-brand">${product.brand.name}</span>
+                                                </div>
+                                            </div>
+                                        </div>`
+                                    );
+                                });
+                            } else {
+                                $('#search-results').append(
+                                    `<div class="no-product">
+                                        <p>No products found. Try searching again</p>
+                                    </div>`
+                                );
+                            }
+                        },
+                    });
+                } else {
+                    $('#search-results').empty();
+                }
+            });
+        });
+
+        $('.close-search').on('click', function() {
+            $('#search-input').val('');
+            $('#search-results').empty();
+        });
     </script>
 
     @stack('scripts')

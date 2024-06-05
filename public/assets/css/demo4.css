@@ -3744,6 +3744,96 @@ header .profile-dropdown ul li {
     padding: 5px 20px;
 }
 
+/* .container-fluid-search {
+    padding: 0 112px;
+    position: relative;
+}
+@media (max-width: 1460px) {
+    .container-fluid-search {
+        padding: 0 60px;
+    }
+}
+@media (max-width: 1366px) {
+    .container-fluid-search {
+        padding: 0 30px;
+    }
+}
+@media (max-width: 1199px) {
+    .container-fluid-search {
+        padding: 0 12px;
+    }
+} */
+#search-results {
+    background-color: #f1f1f1;
+
+    border-radius: 0.5rem;
+    position: absolute;
+    width: 100%;
+    overflow-y: auto;
+    z-index: 1000;
+    opacity: 0.9;
+}
+#search-results .productItem{
+    border-bottom: 1px solid #fff;
+}
+#search-results .productItem:last-child{
+    border: none;
+}
+#search-results .productItem:first-child:hover{
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+#search-results .productItem:last-child:hover{
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+#search-results .productItem:hover{
+    background-color: #eac9c9;
+    transition: background-color linear 0.5s;
+}
+#search-results .info-product{
+    padding-left: 10px;
+}
+#search-results .info-product a:hover{
+    color: #ff007f;
+    text-decoration: underline;
+}
+#search-results img.img-fluid-search{
+    width: 70px;
+    height: auto;
+}
+#search-results p.sale-price{
+    font-size: 16px;
+    color: var(--theme-color);
+    font-weight: 400;
+    margin: 5px 0;
+}
+#search-results span.regular-price{
+    text-decoration: line-through;
+    font-size: 12px;
+    color: #6d6d6d;
+    margin-left: 2px;
+}
+#search-results .category, #search-results .brand{
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b4b4b;
+}
+#search-results .category .name-cat, #search-results .brand .name-brand{
+    padding-left: 5px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #383737;
+}
+#search-results .no-product{
+    padding: 20px 15px;
+    text-align: center;
+    background-color: #ff3d3d;
+}
+#search-results .no-product p{
+    margin: 0;
+    font-size: 20px;
+    color: #fff;
+}
+
 .brand-logo .svg-icon {
     width: 25px;
     height: 25px;

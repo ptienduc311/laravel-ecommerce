@@ -274,8 +274,6 @@
                         <!-- label and featured section -->
                         <div class="col-md-12">
                             <ul class="short-name">
-
-
                             </ul>
                         </div>
 

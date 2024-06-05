@@ -14,4 +14,12 @@ class AppController extends Controller
         $productIdsWishlist = Cart::instance("wishlist")->content()->pluck('id')->toArray();
         return view('index', compact('products', 'productsTopDeals', 'productIdsWishlist'));
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $products = Product::where('name', 'LIKE', "%{$query}%")->with('category', 'brand')->get();
+
+        return response()->json($products);
+    }
 }
