@@ -39,6 +39,11 @@
 .font-dark-30 {
   color: #232323 !important; }
 
+p.error{
+  padding: 10px 0;
+  margin: 0;
+  color: red;
+}
 /*======= Font-color css end  ======= */
 /*======= buttons css starts  ======= */
 .btn-solid-dark {
@@ -5712,6 +5717,16 @@ header .main-navbar {
     .rating li i.theme-color {
       color: #ffa202 !important; }
 
+      .my-rating {
+        display: block;
+        margin-bottom: -4px; }
+        [dir="rtl"] .my-rating {
+          padding: 0; }
+        .my-rating li i {
+          color: #c3c3c3 !important; }
+          .my-rating li i.theme-color {
+            color: #ffa202 !important; }
+
 .heart-wishlist {
   font-size: 14px;
   width: 30px;
@@ -5956,7 +5971,6 @@ header .main-navbar {
       -webkit-box-orient: vertical;
       display: -webkit-box;
       overflow: hidden;
-      width: 90%;
       font-weight: 500; }
     .product-box .product-details .size-box {
       margin-top: 5px !important;
@@ -12456,6 +12470,9 @@ hr {
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center; }
+            .product-buttons .btn-solid.active {
+              background-color: #f31111;
+            }
     .product-buttons .btn-solid + .btn-solid {
       margin-left: 8px; }
       [dir="rtl"] .product-buttons .btn-solid + .btn-solid {

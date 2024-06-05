@@ -135,11 +135,16 @@
                                                     </span>
                                                 </div>
                                             </li>
-                                            <li><a href="{{ route('app.index') }}" class="nav-link menu-title">Home</a></li>
-                                            <li><a href="{{ route('shop.index') }}" class="nav-link menu-title">Shop</a></li>
-                                            <li><a href="{{ route('cart.index') }}" class="nav-link menu-title">Cart</a></li>
-                                            <li><a href="{{ route('blog.about') }}" class="nav-link menu-title">About Us</a></li>
-                                            <li><a href="{{ route('blog.contact') }}" class="nav-link menu-title">Contact Us</a>
+                                            <li><a href="{{ route('app.index') }}" class="nav-link menu-title">Home</a>
+                                            </li>
+                                            <li><a href="{{ route('shop.index') }}"
+                                                    class="nav-link menu-title">Shop</a></li>
+                                            <li><a href="{{ route('cart.index') }}"
+                                                    class="nav-link menu-title">Cart</a></li>
+                                            <li><a href="{{ route('blog.about') }}" class="nav-link menu-title">About
+                                                    Us</a></li>
+                                            <li><a href="{{ route('blog.contact') }}"
+                                                    class="nav-link menu-title">Contact Us</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -157,20 +162,116 @@
                                             <a href="{{ route('wishlist.list') }}">
                                                 <i data-feather="heart"></i>
                                                 <span id="wishlist-count" class="label label-theme rounded-pill">
-                                                    {{Cart::instance("wishlist")->content()->count()}}
+                                                    {{ Cart::instance('wishlist')->count() }}
                                                 </span>
                                             </a>
                                         </div>
+                                        @if (Cart::instance('wishlist')->count() == 0)
+                                            <div class="onhover-div">
+                                                <a href="{{ route('wishlist.list') }}">
+                                                    <div class="wislist-empty">
+                                                        <i class="fab fa-gratipay"></i>
+                                                        <h6 class="mb-1">Your wislist empty !!</h6>
+                                                        <p class="font-light mb-0">explore more and shortlist items.
+                                                        </p>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        @endif
                                     </li>
-                                    <li class="onhover-dropdown wislist-dropdown">
-                                        <div class="cart-media">
-                                            <a href="{{route('cart.index')}}">
+                                    <li class="onhover-dropdown cart-dropdown">
+                                        <button type="button" class="btn btn-solid-default btn-spacing d-md-none">
+                                            <i data-feather="shopping-cart" class="pe-2"></i>
+                                            @if (Cart::instance('cart')->count() > 0)
+                                                <span>${{ Cart::instance('cart')->total() }}</span>
+                                            @endif
+                                        </button>
+                                        <div class="cart-media d-none d-md-block">
+                                            <a href="{{ route('cart.index') }}">
                                                 <i data-feather="shopping-cart"></i>
                                                 <span id="cart-count" class="label label-theme rounded-pill">
-                                                    {{Cart::instance('cart')->count()}}
+                                                    {{ Cart::instance('cart')->count() }}
                                                 </span>
                                             </a>
                                         </div>
+                                        @if (Cart::instance('cart')->count() == 0)
+                                            <div class="onhover-div">
+                                                <a href="{{ route('wishlist.list') }}">
+                                                    <div class="wislist-empty">
+                                                        <i class="fab fa-opencart"></i>
+                                                        <h6 class="mb-1">Your cart empty !!</h6>
+                                                        <p class="font-light mb-0">Add products to your cart now
+                                                        </p>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        @else
+                                            <div class="onhover-div">
+                                                <div class="cart-menu">
+                                                    <div class="cart-title">
+                                                        <h6>
+                                                            <i data-feather="shopping-bag"></i>
+                                                            <span
+                                                                class="label label-theme rounded-pill">{{ Cart::instance('cart')->count() }}</span>
+                                                        </h6>
+                                                        <span class="d-md-none d-block">
+                                                            <i class="fas fa-arrow-right back-cart"></i>
+                                                        </span>
+                                                    </div>
+                                                    <ul class="custom-scroll">
+                                                        @php
+                                                            $temp = 0;
+                                                        @endphp
+                                                        @foreach (Cart::instance('cart')->content() as $item)
+                                                            @php
+                                                                $temp++;
+                                                            @endphp
+                                                            @if ($temp < 4)
+                                                                <li>
+                                                                    <div class="media">
+                                                                        <img src="{{ asset('assets/images/fashion/product/front') }}/{{ $item->model->image }}"
+                                                                            class="img-fluid blur-up lazyload"
+                                                                            alt="{{ $item->model->name }}">
+                                                                        <div class="media-body">
+                                                                            <h6>{{ $item->model->name }}</h6>
+                                                                            <div class="qty-with-price">
+                                                                                <span>${{ $item->price }}</span>
+                                                                                <span>
+                                                                                    <input type="number"
+                                                                                        name="quantity"
+                                                                                        data-rowid="{{ $item->rowId }}"
+                                                                                        onchange="updateQuantity(this)"
+                                                                                        class="form-control input-number"
+                                                                                        value="{{ $item->qty }}">
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <a href="javascript:void(0)"
+                                                                            class="btn-close d-block d-md-none"
+                                                                            aria-label="Close"
+                                                                            onclick="removeItemFromCart('{{ $item->rowId }}')">
+                                                                            <i class="fas fa-times"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </li>
+                                                            @endif
+                                                        @endforeach
+                                                        @if ($temp > 3)
+                                                            <li><a href="{{route('cart.index')}}">Go to cart</a></li>
+                                                        @endif
+                                                    </ul>
+                                                </div>
+                                                <div class="cart-btn">
+                                                    <h6 class="cart-total"><span
+                                                            class="font-light">Total:</span>${{ Cart::instance('cart')->total() }}
+                                                    </h6>
+                                                    <a href="{{ route('cart.index') }}"
+                                                        class="btn btn-solid-default btn-block">
+                                                        Proceed to payment
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </li>
                                     <li class="onhover-dropdown">
                                         <div class="cart-media name-usr">
@@ -185,11 +286,13 @@
                                                     @auth
                                                         @if (Auth::user()->utype === 'ADM')
                                                             <li>
-                                                                <a href="{{ route('admin.index') }}" class="d-block">Dashboard</a>
+                                                                <a href="{{ route('admin.index') }}"
+                                                                    class="d-block">Dashboard</a>
                                                             </li>
                                                         @else
                                                             <li>
-                                                                <a href="{{ route('user.index') }}" class="d-block">My account</a>
+                                                                <a href="{{ route('user.index') }}" class="d-block">My
+                                                                    account</a>
                                                             </li>
                                                         @endif
                                                         <li>
@@ -206,7 +309,8 @@
                                                             <a href="{{ route('login') }}" class="d-block">Login</a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('register') }}" class="d-block">Register</a>
+                                                            <a href="{{ route('register') }}"
+                                                                class="d-block">Register</a>
                                                         </li>
                                                     @endauth
                                                 @endif
@@ -463,6 +567,19 @@
         </div>
     </div>
 
+    <form id="updateCartQty" action="{{ route('cart.update') }}" method="POST">
+        @csrf
+        @method('put')
+        <input type="hidden" id="rowId" name="rowId" />
+        <input type="hidden" id="quantity" name="quantity" />
+    </form>
+
+    <form id="deleteFromCart" action="{{ route('cart.remove') }}" method="post">
+        @csrf
+        @method('delete')
+        <input type="hidden" id="rowId_D" name="rowId" />
+    </form>
+
     <div class="tap-to-top">
         <a href="#home">
             <i class="fas fa-chevron-up"></i>
@@ -481,15 +598,26 @@
     <script src="{{ asset('assets/js/filter.js') }}"></script>
     <script src="{{ asset('assets/js/newsletter.js') }}"></script>
     <script src="{{ asset('assets/js/cart_modal_resize.js') }}"></script>
+    <script src="{{ asset('assets/js/rating.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap/bootstrap-notify.min.js') }}"></script>
     <script src="{{ asset('assets/js/theme-setting.js') }}"></script>
     <script src="{{ asset('assets/js/script.js') }}"></script>
-    {{-- <script src="{{ asset('assets/js/customJs.js') }}"></script> --}}
 
     <script>
         $(function() {
             $('[data-bs-toggle="tooltip"]').tooltip()
         });
+
+        function updateQuantity(qty) {
+            $a = $('#rowId').val($(qty).data('rowid'));
+            $b = $('#quantity').val($(qty).val());
+            $('#updateCartQty').submit();
+        }
+
+        function removeItemFromCart(rowId) {
+            $('#rowId_D').val(rowId);
+            $('#deleteFromCart').submit();
+        }
     </script>
 
     @stack('scripts')

@@ -18,23 +18,23 @@ class CartController extends Controller
         $product = Product::find($request->id);
         $price = $product->sale_price ? $product->sale_price : $product->regular_price;
         Cart::instance('cart')->add($product->id,$product->name,$request->quantity,$price)->associate('App\Models\Product');
-        return redirect()->route('cart.index');
+        return redirect()->back();
     }
     public function updateCart(Request $request)
     {
         Cart::instance('cart')->update($request->rowId,$request->quantity);
-        return redirect()->route('cart.index');
+        return redirect()->back();
     }
     public function removeCart(Request $request)
     {
         $rowId = $request->rowId;
         Cart::instance('cart')->remove($rowId);
-        return redirect()->route('cart.index');
+        return redirect()->back();
     }
     public function clearCart()
     {
         Cart::instance('cart')->destroy();
-        return redirect()->route('cart.index');
+        return redirect()->back();
     }
 
 }

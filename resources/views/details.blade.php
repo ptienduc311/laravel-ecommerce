@@ -201,18 +201,26 @@
                                     </div>
 
                                     <div class="product-buttons">
+                                        @if (in_array($product->id, $productIdsWishlist))
+                                            <a class="btn btn-solid active">
+                                                <i class="fa fa-bookmark fz-16 me-2"></i>
+                                                <span>Wishlist</span>
+                                            </a>
+                                        @else
+                                            <a href="javascript:void(0)"
+                                                onclick="addProductToWishlist({{ $product->id }}, '{{ $product->name }}', 1, {{ $product->sale_price }})"
+                                                class="btn btn-solid wishlist">
+                                                <i class="fa fa-bookmark fz-16 me-2"></i>
+                                                <span>Wishlist</span>
+                                            </a>
+                                        @endif
                                         <a href="javascript:void(0)"
-                                            onclick="addProductToWishlist({{ $product->id }}, '{{ $product->name }}', 1, {{ $product->sale_price }})"
-                                            class="btn btn-solid">
-                                            <i class="fa fa-bookmark fz-16 me-2"></i>
-                                            <span>Wishlist</span>
-                                        </a>
-                                        <a href="javascript:void(0)"
-                                            onclick="event.preventDefault();document.getElementById('addtocart').submit();"
+                                            onclick="event.preventDefault();document.getElementById('addtocart-{{ $product->id }}').submit();"
                                             id="cartEffect" class="btn btn-solid hover-solid btn-animation">
                                             <i class="fa fa-shopping-cart"></i>
                                             <span>Add To Cart</span>
-                                            <form id="addtocart" method="post" action="{{ route('cart.store') }}">
+                                            <form id="addtocart-{{ $product->id }}" method="post"
+                                                action="{{ route('cart.store') }}">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $product->id }}">
                                                 <input type="hidden" name="quantity" id="qty" value="1">
@@ -517,72 +525,68 @@
                                         <div class="customer-rating">
                                             <h2>Customer reviews</h2>
                                             <ul class="rating my-2 d-inline-block">
-                                                <li>
-                                                    <i class="fas fa-star theme-color"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star theme-color"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star theme-color"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star"></i>
-                                                </li>
-                                                <li>
-                                                    <i class="fas fa-star"></i>
-                                                </li>
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <li>
+                                                        <i
+                                                            class="fas fa-star{{ $i <= $average_rating ? ' theme-color' : '' }}"></i>
+                                                    </li>
+                                                @endfor
                                             </ul>
 
                                             <div class="global-rating">
-                                                <h5 class="font-light">82 Ratings</h5>
+                                                <h5 class="font-light">{{ $countRating }} Ratings</h5>
                                             </div>
 
                                             <ul class="rating-progess">
                                                 <li>
                                                     <h5 class="me-3">5 Star</h5>
                                                     <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 78%"
-                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                                                        <div class="progress-bar" role="progressbar"
+                                                            style="width: {{ $rating_percent_5 }}%" aria-valuenow="50"
+                                                            aria-valuemin="0" aria-valuemax="100">
                                                         </div>
                                                     </div>
-                                                    <h5 class="ms-3">78%</h5>
+                                                    <h5 class="ms-3">{{ $rating_percent_5 }}%</h5>
                                                 </li>
                                                 <li>
                                                     <h5 class="me-3">4 Star</h5>
                                                     <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 62%"
-                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                                                        <div class="progress-bar" role="progressbar"
+                                                            style="width: {{ $rating_percent_4 }}%" aria-valuenow="50"
+                                                            aria-valuemin="0" aria-valuemax="100">
                                                         </div>
                                                     </div>
-                                                    <h5 class="ms-3">62%</h5>
+                                                    <h5 class="ms-3">{{ $rating_percent_4 }}%</h5>
                                                 </li>
                                                 <li>
                                                     <h5 class="me-3">3 Star</h5>
                                                     <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 44%"
-                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                                                        <div class="progress-bar" role="progressbar"
+                                                            style="width: {{ $rating_percent_3 }}%" aria-valuenow="50"
+                                                            aria-valuemin="0" aria-valuemax="100">
                                                         </div>
                                                     </div>
-                                                    <h5 class="ms-3">44%</h5>
+                                                    <h5 class="ms-3">{{ $rating_percent_3 }}%</h5>
                                                 </li>
                                                 <li>
                                                     <h5 class="me-3">2 Star</h5>
                                                     <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 30%"
-                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                                                        <div class="progress-bar" role="progressbar"
+                                                            style="width: {{ $rating_percent_2 }}%" aria-valuenow="50"
+                                                            aria-valuemin="0" aria-valuemax="100">
                                                         </div>
                                                     </div>
-                                                    <h5 class="ms-3">30%</h5>
+                                                    <h5 class="ms-3">{{ $rating_percent_2 }}%</h5>
                                                 </li>
                                                 <li>
                                                     <h5 class="me-3">1 Star</h5>
                                                     <div class="progress">
-                                                        <div class="progress-bar" role="progressbar" style="width: 18%"
-                                                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                                                        <div class="progress-bar" role="progressbar"
+                                                            style="width: {{ $rating_percent_1 }}%" aria-valuenow="50"
+                                                            aria-valuemin="0" aria-valuemax="100">
                                                         </div>
                                                     </div>
-                                                    <h5 class="ms-3">18%</h5>
+                                                    <h5 class="ms-3">{{ $rating_percent_1 }}%</h5>
                                                 </li>
                                             </ul>
                                         </div>
@@ -590,198 +594,87 @@
 
                                     <div class="col-lg-8">
                                         <p class="d-inline-block me-2">Rating</p>
-                                        <ul class="rating mb-3 d-inline-block">
-                                            <li>
+                                        <ul class="my-rating mb-3 d-inline-block">
+                                            <li data-value="1">
                                                 <i class="fas fa-star theme-color"></i>
                                             </li>
-                                            <li>
+                                            <li data-value="2">
                                                 <i class="fas fa-star theme-color"></i>
                                             </li>
-                                            <li>
+                                            <li data-value="3">
                                                 <i class="fas fa-star theme-color"></i>
                                             </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
+                                            <li data-value="4">
+                                                <i class="fas fa-star theme-color"></i>
                                             </li>
-                                            <li>
-                                                <i class="fas fa-star"></i>
+                                            <li data-value="5">
+                                                <i class="fas fa-star theme-color"></i>
                                             </li>
                                         </ul>
                                         <div class="review-box">
-                                            <form class="row g-4">
+                                            {{-- 123 --}}
+
+                                            <div class="row">
                                                 <div class="col-12 col-md-6">
                                                     <label class="mb-1" for="name">Name</label>
                                                     <input type="text" class="form-control" id="name"
-                                                        placeholder="Enter your name" required="">
+                                                        value="@auth {{ Auth::user()->name }} @endauth" name="name"
+                                                        placeholder="Enter your name">
                                                 </div>
 
                                                 <div class="col-12 col-md-6">
                                                     <label class="mb-1" for="id">Email Address</label>
-                                                    <input type="email" class="form-control" id="id"
-                                                        placeholder="Email Address" required="">
+                                                    <input type="email" class="form-control" id="email"
+                                                        value="@auth {{ Auth::user()->email }} @endauth" name="email"
+                                                        placeholder="Email Address">
                                                 </div>
 
                                                 <div class="col-12">
                                                     <label class="mb-1" for="comments">Comments</label>
                                                     <textarea class="form-control" placeholder="Leave a comment here" id="comments" style="height: 100px"
-                                                        required=""></textarea>
+                                                        name="comment"></textarea>
                                                 </div>
-
-                                                <div class="col-12">
-                                                    <button type="submit"
-                                                        class="btn default-light-theme default-theme default-theme-2">Submit</button>
+                                                <input type="hidden" id="rating" name="rating" value="5">
+                                                <input type="hidden" id="idProduct" name="idProduct"
+                                                    value="{{ $idProduct }}">
+                                                <div class="col-12 mt-2">
+                                                    <button type="submit" onclick="ratingUser()"
+                                                        class="btn default-light-theme default-theme default-theme-2 rating-user">Submit</button>
                                                 </div>
-                                            </form>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="col-12 mt-4">
                                         <div class="customer-review-box">
                                             <h4>Customer Reviews</h4>
+                                            @foreach ($ratings as $item)
+                                                @php
+                                                    $date = new DateTime($item->created_at);
+                                                    $dateRating = $date->format('F j, Y');
+                                                @endphp
+                                                <div class="customer-section">
+                                                    <div class="customer-profile">
+                                                        <img src="../assets/images/inner-page/review-image/{{ $item->rating }}.jpg"
+                                                            class="img-fluid blur-up lazyload" alt="">
+                                                    </div>
 
-                                            <div class="customer-section">
-                                                <div class="customer-profile">
-                                                    <img src="../assets/images/inner-page/review-image/1.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
+                                                    <div class="customer-details">
+                                                        <h5>{{ $item->name }}</h5>
+                                                        <ul class="rating my-2 d-inline-block">
+                                                            @for ($i = 1; $i <= 5; $i++)
+                                                                <li>
+                                                                    <i
+                                                                        class="fas fa-star{{ $i <= $item->rating ? ' theme-color' : '' }}"></i>
+                                                                </li>
+                                                            @endfor
+                                                        </ul>
+                                                        <p class="font-light">{{ $item->comment }}</p>
+
+                                                        <p class="date-custo font-light">- {{ $dateRating }}</p>
+                                                    </div>
                                                 </div>
-
-                                                <div class="customer-details">
-                                                    <h5>Mike K</h5>
-                                                    <ul class="rating my-2 d-inline-block">
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                    <p class="font-light">I purchased my Tab S2 at Best Buy but I wanted
-                                                        to
-                                                        share my thoughts on Amazon. I'm not going to go over specs and
-                                                        such
-                                                        since you can read those in a hundred other places. Though I
-                                                        will
-                                                        say that the "new" version is preloaded with Marshmallow and now
-                                                        uses a Qualcomm octacore processor in place of the Exynos that
-                                                        shipped with the first gen.</p>
-
-                                                    <p class="date-custo font-light">- Sep 08, 2021</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="customer-section">
-                                                <div class="customer-profile">
-                                                    <img src="../assets/images/inner-page/review-image/2.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-
-                                                <div class="customer-details">
-                                                    <h5>Norwalker</h5>
-                                                    <ul class="rating my-2 d-inline-block">
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                    <p class="font-light">Pros: Nice large(9.7") screen. Bright colors.
-                                                        Easy
-                                                        to setup and get started. Arrived on time. Cons: a bit slow on
-                                                        response, but expected as tablet is 2 generations old. But works
-                                                        fine and good value for the money.</p>
-
-                                                    <p class="date-custo font-light">- Sep 08, 2021</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="customer-section">
-                                                <div class="customer-profile">
-                                                    <img src="../assets/images/inner-page/review-image/3.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-
-                                                <div class="customer-details">
-                                                    <h5>B. Perdue</h5>
-                                                    <ul class="rating my-2 d-inline-block">
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                    <p class="font-light">Love the processor speed and the sensitivity
-                                                        of
-                                                        the touch screen.</p>
-
-                                                    <p class="date-custo font-light">- Sep 08, 2021</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="customer-section">
-                                                <div class="customer-profile">
-                                                    <img src="../assets/images/inner-page/review-image/4.jpg"
-                                                        class="img-fluid blur-up lazyload" alt="">
-                                                </div>
-
-                                                <div class="customer-details">
-                                                    <h5>MSL</h5>
-                                                    <ul class="rating my-2 d-inline-block">
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star theme-color"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                        <li>
-                                                            <i class="fas fa-star"></i>
-                                                        </li>
-                                                    </ul>
-                                                    <p class="font-light">I purchased the Tablet May 2017 and now April
-                                                        2019
-                                                        I have to charge it everyday. I don't watch movies on it..just
-                                                        play
-                                                        a game or two while on lunch. I guess now I need to power it
-                                                        down
-                                                        for future use.</p>
-
-                                                    <p class="date-custo font-light">- Sep 08, 2021</p>
-                                                </div>
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
@@ -821,28 +714,45 @@
                                             <ul>
                                                 <li>
                                                     <a href="javascript:void(0)" class="addtocart-btn"
+                                                        onclick="event.preventDefault();document.getElementById('addtocartProductSame-{{ $rproduct->id }}').submit();"
                                                         data-bs-toggle="modal" data-bs-target="#addtocart">
                                                         <i data-feather="shopping-bag"></i>
                                                     </a>
+                                                    <form id="addtocartProductSame-{{ $rproduct->id }}" method="post"
+                                                        action="{{ route('cart.store') }}">
+                                                        @csrf
+                                                        <input type="hidden" name="id"
+                                                            value="{{ $rproduct->id }}">
+                                                        <input type="hidden" name="quantity" id="qty"
+                                                            value="1">
+                                                    </form>
                                                 </li>
                                                 <li>
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#quick-view">
+                                                    <a href="{{ route('shop.product.details', ['slug' => $rproduct->slug]) }}"
+                                                        data-bs-toggle="modal" data-bs-target="#quick-view">
                                                         <i data-feather="eye"></i>
                                                     </a>
                                                 </li>
 
                                                 <li>
-                                                    <a href="javascript:void(0)" class="wishlist">
-                                                        <i data-feather="heart"></i>
-                                                    </a>
+                                                    @if (in_array($rproduct->id, $productIdsWishlist))
+                                                        <a class="active">
+                                                            <i data-feather="heart"></i>
+                                                        </a>
+                                                    @else
+                                                        <a href="javascript:void(0)"
+                                                            onclick="addProductToWishlist({{ $rproduct->id }}, '{{ $rproduct->name }}', 1, {{ $rproduct->sale_price }})"
+                                                            class="wishlist">
+                                                            <i data-feather="heart"></i>
+                                                        </a>
+                                                    @endif
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="product-details">
                                         <div class="rating-details">
-                                            <span class="font-light grid-content">Cupiditate Minus</span>
+                                            <span class="font-light grid-content">{{ $rproduct->category->name }}</span>
                                             <ul class="rating mt-0">
                                                 <li>
                                                     <i class="fas fa-star theme-color"></i>
@@ -908,6 +818,45 @@
                 success: function(data) {
                     if (data.status == 200) {
                         getCartWishlistCount();
+
+                    }
+                }
+            });
+        }
+
+        function getCartWishlistCount() {
+            $.ajax({
+                type: "GET",
+                url: "{{ route('shop.cart.wishlist.count') }}",
+                success: function(data) {
+                    if (data.status == 200) {
+                        $('#cart-count').html(data.cartCount);
+                        $('#wishlist-count').html(data.wishlistCount);
+                    }
+                }
+            });
+        }
+
+        function ratingUser() {
+            var name = $('#name').val();
+            var email = $('#email').val();
+            var comment = $('#comments').val();
+            var rating = $('#rating').val();
+            var idProduct = $('#idProduct').val();
+            $.ajax({
+                type: "POST",
+                url: "{{ route('shop.rating') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    name: name,
+                    email: email,
+                    comment: comment,
+                    rating: rating,
+                    idProduct: idProduct
+                },
+                success: function(data) {
+                    // console.log(data);
+                    if (data.status === 200) {
                         $.notify({
                             icon: "fa fa-check",
                             title: "Success!",
@@ -943,20 +892,85 @@
                                 '<a href="{3}" target="{4}" data-notify="url"></a>' +
                                 "</div>",
                         });
+                        setTimeout(function() {
+                            location.reload();
+                        }, 6000);
+                    } else if (data.status === 400) {
+                        $.notify({
+                            icon: "fa fa-times",
+                            title: "Error!",
+                            message: "This email is not registered! Register an account to rate",
+                        }, {
+                            element: "body",
+                            position: null,
+                            type: "danger",
+                            allow_dismiss: true,
+                            newest_on_top: false,
+                            showProgressbar: true,
+                            placement: {
+                                from: "top",
+                                align: "right",
+                            },
+                            offset: 20,
+                            spacing: 10,
+                            z_index: 1031,
+                            delay: 5000,
+                            animate: {
+                                enter: "animated fadeInDown",
+                                exit: "animated fadeOutUp",
+                            },
+                            icon_type: "class",
+                            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                                '<button type="button" aria-hidden="true" class="btn-close" data-notify="dismiss"></button>' +
+                                '<span data-notify="icon"></span> ' +
+                                '<span data-notify="title">{1}</span> ' +
+                                '<span data-notify="message">{2}</span>' +
+                                '<div class="progress" data-notify="progressbar">' +
+                                '<div class="progress-bar progress-bar-info progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                                "</div>" +
+                                '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                                "</div>",
+                        });
+                    } else if (data.status === 501) {
+                        $.notify({
+                            icon: "fa fa-times",
+                            title: "Error!",
+                            message: "You have already rated this product!",
+                        }, {
+                            element: "body",
+                            position: null,
+                            type: "danger",
+                            allow_dismiss: true,
+                            newest_on_top: false,
+                            showProgressbar: true,
+                            placement: {
+                                from: "top",
+                                align: "right",
+                            },
+                            offset: 20,
+                            spacing: 10,
+                            z_index: 1031,
+                            delay: 5000,
+                            animate: {
+                                enter: "animated fadeInDown",
+                                exit: "animated fadeOutUp",
+                            },
+                            icon_type: "class",
+                            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                                '<button type="button" aria-hidden="true" class="btn-close" data-notify="dismiss"></button>' +
+                                '<span data-notify="icon"></span> ' +
+                                '<span data-notify="title">{1}</span> ' +
+                                '<span data-notify="message">{2}</span>' +
+                                '<div class="progress" data-notify="progressbar">' +
+                                '<div class="progress-bar progress-bar-info progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                                "</div>" +
+                                '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                                "</div>",
+                        });
                     }
-                }
-            });
-        }
-
-        function getCartWishlistCount() {
-            $.ajax({
-                type: "GET",
-                url: "{{ route('shop.cart.wishlist.count') }}",
-                success: function(data) {
-                    if (data.status == 200) {
-                        $('#cart-count').html(data.cartCount);
-                        $('#wishlist-count').html(data.wishlistCount);
-                    }
+                    // error: function(xhr, status, error) {
+                    //     console.error(xhr.responseText); // Thêm dòng này để kiểm tra lỗi từ server
+                    // }
                 }
             });
         }

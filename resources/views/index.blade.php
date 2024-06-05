@@ -971,11 +971,17 @@
                                                 </a>
                                             </li>
                                             <li>
+                                                @if (in_array($product->id, $productIdsWishlist))
+                                                <a class="active">
+                                                    <i data-feather="heart"></i>
+                                                </a>
+                                                @else
                                                 <a href="javascript:void(0)"
                                                     onclick="addProductToWishlist({{ $product->id }}, '{{ $product->name }}', 1, {{ $product->sale_price }})"
                                                     class="wishlist">
                                                     <i data-feather="heart"></i>
                                                 </a>
+                                                @endif
                                             </li>
                                         </ul>
                                     </div>
